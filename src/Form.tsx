@@ -15,62 +15,14 @@ const validationSchema = z
     confirmPassword: z
       .string()
       .min(1, { message: "Confirm Password is required" }),
-    // terms: z.literal(true, {
-    //   invalid_type_error: "You must accept Terms and Conditions",
-    // }),
+    terms: z.literal(true, {
+      errorMap: () => ({ message: "You must accept Terms and Conditions" }),
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
     message: "Password don't match",
   });
-
-const passwordForm = z
-  .object({
-    firstName: z.string().min(1, { message: "Firstname is required" }),
-    lastName: z.string().min(1, { message: "Lastname is required" }),
-    email: z.string().min(1, { message: "Email is required" }).email({
-      message: "Must be a valid email",
-    }),
-    password: z
-      .string()
-      .min(6, { message: "Password must be atleast 6 characters" }),
-    confirm: z.string().min(1, { message: "Confirm Password is required" }),
-    terms: z.literal(true),
-  })
-  .refine((data) => data.password === data.confirm, {
-    message: "Passwords don't match",
-    path: ["confirm"], // path of error
-  });
-
-try {
-  passwordForm.parse({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "asdf",
-    confirm: "qwer",
-    terms: "hi",
-  });
-} catch (err) {
-  if (err instanceof z.ZodError) {
-    console.log(err.issues);
-  }
-}
-
-// try {
-//   validationSchema.parse({
-//     firstName: "",
-//     lastName: "",
-//     email: "",
-//     password: "1234567",
-//     confirmPassword: "abcdefgh",
-//     terms: false,
-//   });
-// } catch (err) {
-//   if (err instanceof z.ZodError) {
-//     console.log(err.issues);
-//   }
-// }
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
@@ -202,7 +154,7 @@ const Form = () => {
           )}
         </div>
       </div>
-      {/* <div className="mb-4">
+      <div className="mb-4">
         <input type="checkbox" id="terms" {...register("terms")} />
         <label
           htmlFor="terms"
@@ -217,7 +169,7 @@ const Form = () => {
             {errors.terms?.message}
           </p>
         )}
-      </div> */}
+      </div>
       <div className="mb-6 text-center">
         <button
           className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
