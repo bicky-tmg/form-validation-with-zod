@@ -33,12 +33,9 @@ const Form = () => {
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
-    criteriaMode: "all",
   });
 
-  const onSubmit: SubmitHandler<ValidationSchema> = (data) => {
-    console.log(data);
-  };
+  const onSubmit: SubmitHandler<ValidationSchema> = (data) => console.log(data);
 
   return (
     <form className="px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit(onSubmit)}>
